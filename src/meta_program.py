@@ -139,7 +139,7 @@ class FileModifiedHandler(FileSystemEventHandler):
         self.worker.eat(event.src_path)
 
 def main():
-    os.chdir(path.dirname(__file__))
+    os.chdir(path.dirname(path.abspath(__file__)))
     for filename in tqdm(os.listdir(), desc='Validating all'):
         validate(filename)
     fileModifiedHandler = FileModifiedHandler()
