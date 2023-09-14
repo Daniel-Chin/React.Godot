@@ -35,6 +35,9 @@ class Prop:
 
 PRIVATE = 'private '
 def validate(filename: str):
+    if path.splitext(filename)[1].lower().strip().lstrip('.') != 'cs':
+        return
+    print('Validating:', filename)
     buf = StringIO()
     props: List[Prop] = []
     file_modified = False
@@ -79,7 +82,7 @@ def validate(filename: str):
                 lineBuf = StringIO()
                 lineBuf.write(' ' * 8)
                 for prop in props:
-                    lineBuf.write(f'if (! {prop}.Equals({prop}_)) {{ {prop} = {prop}_; need_react = true; }} ')
+                    lineBuf.write(f'if ({prop} != {prop}_) {{ {prop} = {prop}_; need_react = true; }} ')
                 lineBuf.write('\n')
                 lineBuf.seek(0)
                 new_line = lineBuf.read()
@@ -117,7 +120,6 @@ class Worker(Thread):
             sleep(.1)
             with self.lock:
                 filename = self.todo.pop()
-            print('Validating:', filename)
             validate(filename)
     
     def stop(self):

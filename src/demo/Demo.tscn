@@ -1,0 +1,59 @@
+[gd_scene load_steps=4 format=3 uid="uid://blig44xsjcsn1"]
+
+[ext_resource type="Script" path="res://src/demo/Demo.cs" id="1_jjcid"]
+[ext_resource type="Script" path="res://src/demo/NBSlider.cs" id="2_7qwp1"]
+[ext_resource type="Script" path="res://src/demo/VBox.cs" id="3_s1uy7"]
+
+[node name="Demo" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_jjcid")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+horizontal_alignment = 1
+
+[node name="NBSlider" type="VSlider" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+max_value = 8.0
+rounded = true
+script = ExtResource("2_7qwp1")
+
+[node name="VBox" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("3_s1uy7")
+
+[node name="Button" type="Button" parent="HBoxContainer/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "click"
+
+[node name="Button2" type="Button" parent="HBoxContainer/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "clickf"
+
+[node name="Button3" type="Button" parent="HBoxContainer/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "click"
+
+[node name="Button4" type="Button" parent="HBoxContainer/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "click"
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="OnTimer"]

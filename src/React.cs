@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Godot;
 
@@ -31,23 +30,48 @@ public class ReactPolice {
     public readonly IReactable reactable;
     public readonly Node node;
     public int Depth {get; private set;}
+    public delegate void EffectCleaner();
+    public delegate EffectCleaner Effect();
+    private EffectCleaner effectCleaner;
+    private Effect effect;
 
     public ReactPolice(IReactable reactNode)
     {
         reactable = reactNode;
         node = (Node) reactNode;
+        CalcDepth();
+    }
+
+    private void CalcDepth()
+    {
+        Depth = node.GetPath().GetNameCount();
     }
 
     public void OnEnter()
     {
-        Depth = node.GetPath().GetNameCount();
+        CalcDepth();
         Reactor.Push(this);
         Reactor.Clean(this);
+        if (effectCleaner is not null)
+        {
+            effectCleaner();
+            effectCleaner = null;
+        }
     }
 
     public void OnExit()
     {
         Reactor.Pop(this);
+        if (effect is not null)
+        {
+            effectCleaner = effect();
+            effect = null;
+        }
+    }
+
+    public void UseEffect(Effect effect_)
+    {
+        effect = effect_;
     }
 }
 
@@ -74,7 +98,7 @@ public static class Reactor
     {
         if (DebugMode)
         {
-            Debug.Assert(stack.Peek().Depth < police.Depth);
+            Assert(stack.Peek().Depth < police.Depth);
             stack.Push(police);
         }
     }
@@ -83,13 +107,13 @@ public static class Reactor
     {
         if (DebugMode)
         {
-            Debug.Assert(ReferenceEquals(stack.Pop(), police));
+            Assert(ReferenceEquals(stack.Pop(), police));
         }
     }
 
     public static void OnNewFrame()
     {
-        Debug.Assert(init_ok);
+        Assert(init_ok);
         while (true)
         {
             ReactPolice dirtyPolice = null;
@@ -135,6 +159,27 @@ public static class Reactor
             Dirty[police.Depth] = layer;
         }
         layer.Add(police);
+    }
+
+    public static void Assert(bool x)
+    {
+        if (!x)
+            throw new AssertionFailed();
+    }
+
+    public class AssertionFailed : Exception { }
+
+    public static void PrintDirty()
+    {
+        GD.Print("Dirty:");
+        foreach (var (depth, layer) in Dirty)
+        {
+            GD.Print(" ", depth, ":");
+            foreach (var police in layer)
+            {
+                GD.Print("   ", police);
+            }
+        }
     }
 }
 
