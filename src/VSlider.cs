@@ -2,19 +2,16 @@
 using Godot;
 using System;
 
-public partial class ReactNodeTemplate : Node, IReactable
+public partial class NBSlider : VSlider, IReactable
 {
     [ReactProp]
     private int example_prop;
-
-    private State<bool> example_state;
 
     private ReactPolice police;
 
 	public override void _Ready()
     {
         police = new ReactPolice(this);
-        example_state = new State<bool>(police, false);
     }
 
     public void React()

@@ -56,11 +56,18 @@ public static class Reactor
     public static bool DebugMode = false;
     public static SortedList<int, HashSet<ReactPolice>> Dirty;
     private static readonly Stack<ReactPolice> stack;
+    private static bool init_ok = false;
 
     static Reactor()
     {
         Dirty = new SortedList<int, HashSet<ReactPolice>>();
         stack = new Stack<ReactPolice>();
+    }
+
+    public static void Init(IReactable root)
+    {
+        root.React();
+        init_ok = true;
     }
 
     public static void Push(ReactPolice police)
@@ -82,6 +89,7 @@ public static class Reactor
 
     public static void OnNewFrame()
     {
+        Debug.Assert(init_ok);
         while (true)
         {
             ReactPolice dirtyPolice = null;
