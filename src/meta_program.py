@@ -7,6 +7,7 @@ from time import sleep
 from threading import Thread, Lock, Semaphore
 from io import StringIO
 from enum import Enum
+import traceback
 
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler, FileModifiedEvent
@@ -120,7 +121,10 @@ class Worker(Thread):
             sleep(.1)
             with self.lock:
                 filename = self.todo.pop()
-            validate(filename)
+            try:
+                validate(filename)
+            except:
+                traceback.print_exc()
     
     def stop(self):
         self.do_stop = True
