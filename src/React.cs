@@ -195,6 +195,7 @@ public class State<T>
 {
     private T value;
     public readonly ReactPolice owner;
+    public delegate void SetterType(T x);
     public State(ReactPolice owner_, T default_value)
     {
         value = default_value;
@@ -214,6 +215,10 @@ public class State<T>
                 Reactor.Stain(owner);
             }
         }
+    }
+    public SetterType Setter()
+    {
+        return (T x) => {Set(x);};
     }
 }
 
