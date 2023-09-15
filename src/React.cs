@@ -204,8 +204,11 @@ public class State<T>
     {
         lock (Reactor.Dirty)
         {
-            value = new_value;
-            Reactor.Stain(owner);
+            if (value != new_value)
+            {
+                value = new_value;
+                Reactor.Stain(owner);
+            }
         }
     }
 }
