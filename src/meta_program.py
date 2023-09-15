@@ -29,6 +29,13 @@ class Prop:
     def __init__(self, type_: str, name: str) -> None:
         self.type = type_
         self.name = name
+        if type_ in (
+            'int', 'float', 'double', 'bool', 'string', 
+        ):
+            return
+        if type_.startswith('State<') and type_.endswith('>.SetterType'):
+            return
+        raise Exception('Not a known immutable type:', type_)
     
     def asFormalParam(self):
         return f'{self.type} {self.name}_'
