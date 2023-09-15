@@ -35,6 +35,8 @@ class Prop:
             return
         if type_.startswith('State<') and type_.endswith('>.SetterType'):
             return
+        if type_.startswith('CallbackType.'):
+            return
         raise Exception('Not a known immutable type:', type_)
     
     def asFormalParam(self):
