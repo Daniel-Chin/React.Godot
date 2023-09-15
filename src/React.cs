@@ -216,7 +216,7 @@ public interface IHasDepth
 }
 
 public class GodotNodeHasDepth : IHasDepth
-{
+{   // for repersenting RenderingServer objects without scene tree
     private readonly Node node;
     public GodotNodeHasDepth(Node node_)
     {
