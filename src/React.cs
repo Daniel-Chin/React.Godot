@@ -266,3 +266,8 @@ public class GodotNodeHasDepth : IHasDepth
         return node.GetPath().GetNameCount();
     }
 }
+
+public static class CallbackType
+{
+    public delegate void VoidVoid();
+}
