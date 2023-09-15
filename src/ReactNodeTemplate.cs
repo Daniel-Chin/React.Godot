@@ -17,13 +17,17 @@ public partial class ReactNodeTemplate : Node, IReactable
         example_state = new State<bool>(police, false);
     }
 
+    private void Declare()
+    {
+        // your code here
+    }
+    
     public void React()
     {
         police.OnEnter();
-        
         try
         {
-            // your code here
+            Declare();
         }
         finally
         {
