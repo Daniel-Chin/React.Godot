@@ -207,7 +207,7 @@ public class State<T>
         depender_subroots.Add(owner);
     }
     public void UsedBy(ReactPolice depender_subroot)
-    {
+    {   // react.js does this with useContext
         depender_subroots.Add(depender_subroot);
     }
     public T Get(ReactPolice depender_subroot)
