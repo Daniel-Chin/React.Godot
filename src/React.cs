@@ -204,7 +204,7 @@ public class State<T>
     {
         lock (Reactor.Dirty)
         {
-            if (value != new_value)
+            if (! EqualityComparer<T>.Default.Equals(value, new_value))
             {
                 value = new_value;
                 Reactor.Stain(owner);
