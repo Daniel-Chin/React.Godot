@@ -12,6 +12,9 @@ A react node:
 - Its constructor takes no arguments.  
 - In React(), access only props and self states, and nothing else.  
     - e.g. don't use system time. Don't use Godot node attributes.  
+- When setting Godot node attributes,  
+    - never in an `if` branch.  
+    - declarative.  
 
 The python metaprogrammer makes sure 
 - Populates SetProps(...) according to props.  
