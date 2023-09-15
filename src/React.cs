@@ -102,7 +102,11 @@ public static class Reactor
     {
         if (DebugMode)
         {
-            Assert(stack.Peek().Depth < police.Depth);
+            Assert(
+                stack.Count == 0 
+            || 
+                stack.Peek().Depth < police.Depth
+            );
             stack.Push(police);
         }
     }
