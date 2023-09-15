@@ -21,9 +21,14 @@ public partial class ReactNodeTemplate : Node, IReactable
     {
         police.OnEnter();
         
-        // your code here
-        
-        police.OnExit();
+        try
+        {
+            // your code here
+        }
+        finally
+        {
+            police.OnExit();
+        }
     }
 
     public void SetProps(
