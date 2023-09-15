@@ -28,29 +28,32 @@ public interface IReactable
 
 public class ReactPolice {
     public readonly IReactable reactable;
-    public readonly Node node;
-    public int Depth {get; private set;}
+    public readonly IHasDepth hasDepth;
+    public int Depth {get; private set;}    // cache
     public delegate void EffectCleaner();
     public delegate EffectCleaner Effect();
     private EffectCleaner effectCleaner;
     private Effect effect;
 
-    public ReactPolice(IReactable reactNode)
+    public ReactPolice(IReactable reactable_, IHasDepth hasDepth_)
     {
-        reactable = reactNode;
-        node = (Node) reactNode;
-        CalcDepth();
+        reactable = reactable_;
+        hasDepth = hasDepth_;
+        RecacheDepth();
         Reactor.Stain(this);
     }
+    public ReactPolice(IReactable reactNode) : this(
+        reactNode, new GodotNodeHasDepth((Node) reactNode)
+    ) { }
 
-    private void CalcDepth()
+    private void RecacheDepth()
     {
-        Depth = node.GetPath().GetNameCount();
+        Depth = hasDepth.DepthInTree();
     }
 
     public void OnEnter()
     {
-        CalcDepth();
+        RecacheDepth();
         Reactor.Push(this);
         Reactor.Clean(this);
         if (effectCleaner is not null)
@@ -204,5 +207,24 @@ public class State<T>
             value = new_value;
             Reactor.Stain(owner);
         }
+    }
+}
+
+public interface IHasDepth
+{
+    public int DepthInTree();
+}
+
+public class GodotNodeHasDepth : IHasDepth
+{
+    private readonly Node node;
+    public GodotNodeHasDepth(Node node_)
+    {
+        node = node_;
+    }
+
+    public int DepthInTree()
+    {
+        return node.GetPath().GetNameCount();
     }
 }
