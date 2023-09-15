@@ -11,7 +11,6 @@ public partial class Butt : Button, IReactable
 	public override void _Ready()
     {
         police = new ReactPolice(this);
-        Reactor.Stain(police);
         is_active = new State<bool>(police, false);
     }
 

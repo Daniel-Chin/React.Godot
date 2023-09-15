@@ -12,7 +12,7 @@ A react node:
 - Has exactly two public methods: SetProps(...), and _Ready().  
 - Its constructor takes no arguments.  
 - In React(), access only props and self states, and nothing else.  
-    - e.g. don't use system time.  
+    - e.g. don't use system time. Don't use Godot node attributes.  
 
 The python metaprogrammer makes sure 
 - Populates SetProps(...) according to props.  
@@ -40,6 +40,7 @@ public class ReactPolice {
         reactable = reactNode;
         node = (Node) reactNode;
         CalcDepth();
+        Reactor.Stain(this);
     }
 
     private void CalcDepth()

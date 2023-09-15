@@ -14,7 +14,6 @@ public partial class ReactNodeTemplate : Node, IReactable
 	public override void _Ready()
     {
         police = new ReactPolice(this);
-        Reactor.Stain(police);
         example_state = new State<bool>(police, false);
     }
 

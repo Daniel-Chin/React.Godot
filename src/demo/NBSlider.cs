@@ -14,7 +14,6 @@ public partial class NBSlider : VSlider, IReactable
 	public override void _Ready()
     {
         police = new ReactPolice(this);
-        Reactor.Stain(police);
     }
 
     public void React()

@@ -15,7 +15,6 @@ public partial class Demo : MarginContainer, IReactable
 	public override void _Ready()
     {
         police = new ReactPolice(this);
-        Reactor.Stain(police);
 
         n_buttons = new State<int>(police, 3);
 
