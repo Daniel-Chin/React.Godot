@@ -162,5 +162,6 @@ def main():
         fileModifiedHandler.worker.stop()
         observer.join()
         fileModifiedHandler.worker.join()
+        print('cleanup ok')
 
 main()
