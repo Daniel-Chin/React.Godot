@@ -34,11 +34,11 @@ public partial class Demo : MarginContainer, IReactable
         police.OnEnter();
         
         GD.Print("Demo react");
-        label.Text = n_buttons.Get().ToString();
-        nBSlider.SetProps(n_buttons.Get(), (double v) => {
+        label.Text = n_buttons.Get(police).ToString();
+        nBSlider.SetProps(n_buttons.Get(police), (double v) => {
             n_buttons.Set((int) v);
         });
-        vBox.SetProps(n_buttons.Get());
+        vBox.SetProps(n_buttons.Get(police));
         
         police.OnExit();
     }

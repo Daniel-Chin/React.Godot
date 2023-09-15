@@ -22,7 +22,7 @@ public partial class Butt : Button, IReactable
 
         SizeFlagsVertical = SizeFlags.ExpandFill;
         
-        if (is_active.Get())
+        if (is_active.Get(police))
         {
             Text = "Click: On";
         }
@@ -33,7 +33,7 @@ public partial class Butt : Button, IReactable
 
         void toggle()
         {
-            is_active.Set(!is_active.Get());
+            is_active.Set(!is_active.Get(police));
         }
         police.UseEffect(() => {
             Pressed += toggle;

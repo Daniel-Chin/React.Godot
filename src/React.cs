@@ -7,7 +7,6 @@ using Godot;
 A react node:  
 - Implements IReactable.  
 - Props are private and marked with [ReactProp].  
-- States are private.  
 - All other fields must be immutable after _Ready().  
 - Has exactly two public methods: SetProps(...), and _Ready().  
 - Its constructor takes no arguments.  
@@ -16,6 +15,8 @@ A react node:
 
 The python metaprogrammer makes sure 
 - Populates SetProps(...) according to props.  
+
+Props must be immutable.  
 */
 
 [AttributeUsage(AttributeTargets.Field)]
@@ -194,15 +195,30 @@ public static class Reactor
 public class State<T>
 {
     private T value;
-    public readonly ReactPolice owner;
+    private readonly List<ReactPolice> depender_subroots;
     public delegate void SetterType(T x);
-    public State(ReactPolice owner_, T default_value)
+    public State(T default_value)
     {
         value = default_value;
-        owner = owner_;
+        depender_subroots = new List<ReactPolice>();
     }
-    public T Get()
+    public State(ReactPolice owner, T default_value) : this(default_value)
     {
+        depender_subroots.Add(owner);
+    }
+    public void UsedBy(ReactPolice depender_subroot)
+    {
+        depender_subroots.Add(depender_subroot);
+    }
+    public T Get(ReactPolice depender_subroot)
+    {
+        if (
+            Reactor.DebugMode
+            && ! depender_subroots.Contains(depender_subroot)
+        )
+        {
+            throw new Reactor.AssertionFailed();
+        }
         return value;
     }
     public void Set(T new_value)
@@ -212,7 +228,10 @@ public class State<T>
             if (! EqualityComparer<T>.Default.Equals(value, new_value))
             {
                 value = new_value;
-                Reactor.Stain(owner);
+                foreach (var depender_subroot in depender_subroots)
+                {
+                    Reactor.Stain(depender_subroot);
+                }
             }
         }
     }
