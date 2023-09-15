@@ -24,6 +24,8 @@ Props must be immutable.
 
 [AttributeUsage(AttributeTargets.Field)]
 public class ReactProp : Attribute { }
+[AttributeUsage(AttributeTargets.Field)]
+public class ReactState : Attribute { }
 
 public interface IReactable
 {
