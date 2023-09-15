@@ -109,9 +109,9 @@ def validate(filename: str):
                 for state in states:
                     lineBuf.write(PRIVATE)
                     lineBuf.write(state.type)
-                    lineBuf.write(' ')
+                    lineBuf.write(' P_')
                     lineBuf.write(state.name)
-                    lineBuf.write('_ { get => ')
+                    lineBuf.write(' { get => ')
                     lineBuf.write(state.name)
                     lineBuf.write('.Get(police); set { ')
                     lineBuf.write(state.name)
