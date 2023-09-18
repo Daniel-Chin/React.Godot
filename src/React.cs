@@ -40,13 +40,15 @@ public class ReactPolice {
     public int Depth {get; private set;}    // cache
     public delegate void EffectCleaner();
     public delegate EffectCleaner Effect();
-    private EffectCleaner effectCleaner;
-    private Effect effect;
+    private Queue<Effect> effects;
+    private Queue<EffectCleaner> effectCleaners;
 
     public ReactPolice(IReactable reactable_, IHasDepth hasDepth_)
     {
         reactable = reactable_;
         hasDepth = hasDepth_;
+        effects = new Queue<Effect>();
+        effectCleaners = new Queue<EffectCleaner>();
         RecacheDepth();
         Reactor.Stain(this);
     }
@@ -64,26 +66,24 @@ public class ReactPolice {
         RecacheDepth();
         Reactor.Push(this);
         Reactor.Clean(this);
-        if (effectCleaner is not null)
+        foreach (var cleaner in effectCleaners)
         {
-            effectCleaner();
-            effectCleaner = null;
+            cleaner();
         }
     }
 
     public void OnExit()
     {
         Reactor.Pop(this);
-        if (effect is not null)
+        foreach (var effect in effects)
         {
-            effectCleaner = effect();
-            effect = null;
+            effectCleaners.Enqueue(effect());
         }
     }
 
-    public void UseEffect(Effect effect_)
+    public void UseEffect(Effect effect)
     {
-        effect = effect_;
+        effects.Enqueue(effect);
     }
 }
 
