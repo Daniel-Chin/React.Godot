@@ -14,6 +14,7 @@ from watchdog.events import FileSystemEventHandler, FileModifiedEvent
 from tqdm import tqdm
 
 QUEUE_MAX = 8
+DONT_DELETE = "// Don't delete this line. "
 
 class Stage(Enum):
     FIRST_LINE = 0
@@ -116,6 +117,8 @@ def validate(filename: str):
                     lineBuf.write('.Get(police); set { ')
                     lineBuf.write(state.name)
                     lineBuf.write('.Set(value); } } ')
+                if not states:
+                    lineBuf.write(DONT_DELETE)
                 lineBuf.write('\n')
                 lineBuf.seek(0)
                 new_line = lineBuf.read()
@@ -126,6 +129,8 @@ def validate(filename: str):
                 lineBuf = StringIO()
                 lineBuf.write(' ' * 8)
                 lineBuf.write(', '.join([x.asFormalParam() for x in props]))
+                if not props:
+                    lineBuf.write(DONT_DELETE)
                 lineBuf.write('\n')
                 lineBuf.seek(0)
                 new_line = lineBuf.read()
@@ -137,6 +142,8 @@ def validate(filename: str):
                 lineBuf.write(' ' * 8)
                 for prop in props:
                     lineBuf.write(f'if ({prop} != {prop}_) {{ {prop} = {prop}_; need_react = true; }} ')
+                if not props:
+                    lineBuf.write(DONT_DELETE)
                 lineBuf.write('\n')
                 lineBuf.seek(0)
                 new_line = lineBuf.read()
