@@ -38,6 +38,8 @@ class Prop:
             return
         if type_.startswith('CallbackType.'):
             return
+        if type_.startswith('Action'):
+            return
         if type_.startswith('Enum') or type_.endswith('Enum'):
             return
         print('Hint: Please name your enum types with "Enum" prefix or suffix.')
