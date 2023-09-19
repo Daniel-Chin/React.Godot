@@ -70,6 +70,7 @@ public class ReactPolice {
         {
             cleaner();
         }
+        effectCleaners.Clear();
     }
 
     public void OnExit()
@@ -79,6 +80,7 @@ public class ReactPolice {
         {
             effectCleaners.Enqueue(effect());
         }
+        effects.Clear();
     }
 
     public void UseEffect(Effect effect)
