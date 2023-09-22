@@ -230,6 +230,10 @@ public class State<T>
         }
         return value;
     }
+    public T GetFromNonUI()
+    {
+        return value;
+    }
     public void Set(T new_value)
     {
         lock (Reactor.Dirty)
