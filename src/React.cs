@@ -35,18 +35,18 @@ public interface IReactable
 }
 
 public class ReactPolice {
-    public readonly IReactable reactable;
-    public readonly IHasDepth hasDepth;
+    public readonly IReactable Reactable;
+    public readonly IHasDepth HasDepth;
     public int Depth {get; private set;}    // cache
     public delegate void EffectCleaner();
     public delegate EffectCleaner Effect();
-    private Queue<Effect> effects;
-    private Queue<EffectCleaner> effectCleaners;
+    private readonly Queue<Effect> effects;
+    private readonly Queue<EffectCleaner> effectCleaners;
 
     public ReactPolice(IReactable reactable_, IHasDepth hasDepth_)
     {
-        reactable = reactable_;
-        hasDepth = hasDepth_;
+        Reactable = reactable_;
+        HasDepth = hasDepth_;
         effects = new Queue<Effect>();
         effectCleaners = new Queue<EffectCleaner>();
         RecacheDepth();
@@ -58,7 +58,7 @@ public class ReactPolice {
 
     private void RecacheDepth()
     {
-        Depth = hasDepth.DepthInTree();
+        Depth = HasDepth.DepthInTree();
     }
 
     public void OnEnter()
@@ -105,20 +105,24 @@ public static class Reactor
     public static void Init(IReactable root)
     {
         root.React();
-        bool all_clean = true;
+        ReactPolice dirtyPolice = null;
         lock (Dirty)
         {
             foreach (var (_, layer) in Dirty)
             {
                 if (layer.Count == 0)
                     continue;
-                all_clean = false;
+                dirtyPolice = layer.First();
                 break;
             }
         }
-        if (! all_clean)
+        if (dirtyPolice is not null)
         {
-            throw new AssertionFailed("root.React() did not visit all registered nodes. You probably have a disconnected tree. Make sure to call SetProps() even when the prop list is empty.");
+            throw new AssertionFailed(
+                $"root.React() did not visit {dirtyPolice.Reactable}. "
+                + "You probably have a disconnected tree. "
+                + "Make sure to call SetProps() even when the prop list is empty."
+            );
         }
         init_ok = true;
     }
@@ -160,7 +164,7 @@ public static class Reactor
                 }
                 if (dirtyPolice is null)
                     break;
-                dirtyPolice.reactable.React();
+                dirtyPolice.Reactable.React();
             }
         }
     }
