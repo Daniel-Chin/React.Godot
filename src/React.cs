@@ -105,6 +105,21 @@ public static class Reactor
     public static void Init(IReactable root)
     {
         root.React();
+        bool all_clean = true;
+        lock (Dirty)
+        {
+            foreach (var (_, layer) in Dirty)
+            {
+                if (layer.Count == 0)
+                    continue;
+                all_clean = false;
+                break;
+            }
+        }
+        if (! all_clean)
+        {
+            throw AssertionFailed("root.React() did not visit all registered nodes. You probably have a disconnected tree. Make sure to call SetProps() even when the prop list is empty.");
+        }
         init_ok = true;
     }
 
