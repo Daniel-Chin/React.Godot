@@ -16,7 +16,6 @@ A react node:
     - The control flow should visit each godot node attribute assignment exactly once. e.g.,  
         - don't `return` from Declare() early.  
         - don't put a node attribute assignment in an `if` branch.  
-- In Declare(), call SetProps(...) on all react nodes within the scene.  
 
 The python metaprogrammer  
 - Populates SetProps(...) according to props.  
@@ -103,28 +102,8 @@ public static class Reactor
         stack = new Stack<ReactPolice>();
     }
 
-    public static void Init(IReactable root)
+    public static void Init()
     {
-        root.React();
-        ReactPolice dirtyPolice = null;
-        lock (Dirty)
-        {
-            foreach (var (_, layer) in Dirty)
-            {
-                if (layer.Count == 0)
-                    continue;
-                dirtyPolice = layer.First();
-                break;
-            }
-        }
-        if (dirtyPolice is not null)
-        {
-            throw new AssertionFailed(
-                $"root.React() did not visit {dirtyPolice.Reactable}. "
-                + "You probably have a disconnected tree. "
-                + "Make sure to call SetProps() even when the prop list is empty."
-            );
-        }
         init_ok = true;
     }
 
@@ -152,16 +131,17 @@ public static class Reactor
     public static void OnNewFrame()
     {
         Assert(init_ok);
-        while (true)
+        lock (Dirty)
         {
-            ReactPolice dirtyPolice = null;
-            lock (Dirty)
+            while (true)
             {
+                ReactPolice dirtyPolice = null;
                 foreach (var (_, layer) in Dirty)
                 {
                     if (layer.Count == 0)
                         continue;
                     dirtyPolice = layer.First();
+                    break;
                 }
                 if (dirtyPolice is null)
                     break;
