@@ -118,7 +118,7 @@ public static class Reactor
         }
         if (! all_clean)
         {
-            throw AssertionFailed("root.React() did not visit all registered nodes. You probably have a disconnected tree. Make sure to call SetProps() even when the prop list is empty.");
+            throw new AssertionFailed("root.React() did not visit all registered nodes. You probably have a disconnected tree. Make sure to call SetProps() even when the prop list is empty.");
         }
         init_ok = true;
     }
