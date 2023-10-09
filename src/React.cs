@@ -200,7 +200,11 @@ public static class Reactor
             throw new AssertionFailed();
     }
 
-    public class AssertionFailed : Exception { }
+    public class AssertionFailed : Exception
+    {
+        public AssertionFailed() : base() { }
+        public AssertionFailed(string message) : base(message) { }
+    }
 
     public static void PrintDirty()
     {
