@@ -16,6 +16,7 @@ A react node:
     - The control flow should visit each godot node attribute assignment exactly once. e.g.,  
         - don't `return` from Declare() early.  
         - don't put a node attribute assignment in an `if` branch.  
+- In Declare(), call SetProps(...) on all react nodes within the scene.  
 
 The python metaprogrammer  
 - Populates SetProps(...) according to props.  
