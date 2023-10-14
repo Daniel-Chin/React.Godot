@@ -31,7 +31,7 @@ class Prop:
         self.type = type_
         self.name = name
         if type_ in (
-            'int', 'float', 'double', 'bool', 'string', 
+            'int', 'long', 'float', 'double', 'bool', 'string', 
         ):
             return
         if type_.startswith('State<') and type_.endswith('>.SetterType'):
@@ -91,14 +91,14 @@ def validate(filename: str):
                     do_expect_prop = False
                     assert line_stripped.startswith(PRIVATE)
                     line_stripped = line_stripped[len(PRIVATE):]
-                    type_, name = line_stripped.rstrip(';').split(' ')
+                    type_, name = line_stripped.rstrip(';')[0].split(' ')
                     props.append(Prop(type_, name))
                     continue
                 if do_expect_state:
                     do_expect_state = False
                     assert line_stripped.startswith(PRIVATE)
                     line_stripped = line_stripped[len(PRIVATE):]
-                    state_type, name = line_stripped.rstrip(';').split(' ')
+                    state_type, name = line_stripped.rstrip(';')[0].split(' ')
                     assert state_type.startswith(STATE)
                     type_ = state_type[len(STATE):].rstrip('>')
                     states.append(State(type_, name))
