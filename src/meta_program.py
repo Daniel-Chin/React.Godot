@@ -42,8 +42,9 @@ class Prop:
             return
         if type_.startswith('Enum') or type_.endswith('Enum'):
             return
+        print()
         print('Hint: Please name your enum types with "Enum" prefix or suffix.')
-        print('\n Warning: Not a known immutable type:', type_)
+        print('Warning: Not a known immutable type:', type_)
     
     def asFormalParam(self):
         return f'{self.type} {self.name}_'
