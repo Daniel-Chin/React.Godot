@@ -91,14 +91,14 @@ def validate(filename: str):
                     do_expect_prop = False
                     assert line_stripped.startswith(PRIVATE)
                     line_stripped = line_stripped[len(PRIVATE):]
-                    type_, name = line_stripped.rstrip(';')[0].split(' ')
+                    type_, name = line_stripped.split(';', 1)[0].split(' ')
                     props.append(Prop(type_, name))
                     continue
                 if do_expect_state:
                     do_expect_state = False
                     assert line_stripped.startswith(PRIVATE)
                     line_stripped = line_stripped[len(PRIVATE):]
-                    state_type, name = line_stripped.rstrip(';')[0].split(' ')
+                    state_type, name = line_stripped.split(';', 1)[0].split(' ')
                     assert state_type.startswith(STATE)
                     type_ = state_type[len(STATE):].rstrip('>')
                     states.append(State(type_, name))
