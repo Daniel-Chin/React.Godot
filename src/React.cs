@@ -3,27 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
-/*
-A react node:  
-- Implements IReactable.  
-- Props are private and marked with [ReactProp].  
-- States are private and marked with [ReactState].  
-- All other fields must be immutable after _Ready().  
-- Has exactly three public methods: SetProps(...), React(), and _Ready().  
-- Its constructor takes no arguments.  
-- In Declare(), read only props and states, and nothing else.  
-    - e.g. don't read system time. Don't read Godot node attributes.  
-    - The control flow should visit each godot node attribute assignment exactly once. e.g.,  
-        - don't `return` from Declare() early.  
-        - don't put a node attribute assignment in an `if` branch.  
-
-The python metaprogrammer  
-- Populates SetProps(...) according to props.  
-- Provides `{state_name}_` attributes as shorthands for getting and setting states.  
-
-Props (and state values) must be immutable.  
-*/
-
 [AttributeUsage(AttributeTargets.Field)]
 public class ReactProp : Attribute { }
 [AttributeUsage(AttributeTargets.Field)]
